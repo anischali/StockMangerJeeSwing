@@ -7,7 +7,11 @@ import com.gest.beans.ArticleStock;
 public class ArticleForm {
 	private String fields = "";
 	
-	
+    /**
+	 * Vérifie l'entrée de l'utilisateur pour éviter des problème de sécurité ou des erreurs avec la base de données. 
+	 * @param art le contenu de différents champs de l'article.
+	 * @return true si tout est bien sinon false.
+	 */
 	public boolean checkArticleStockForm(HttpServletRequest request)
 	{
 		String barcode = request.getParameter("barcode");
@@ -16,22 +20,22 @@ public class ArticleForm {
 		String price = request.getParameter("price");
 		String quantity = request.getParameter("quantity");
 		String treshold = request.getParameter("treshold");
-		if (barcode.matches("/[0-9]") == false || barcode.length() != 13) 
+		if (barcode.matches("^\\d+?") == false || barcode.length() != 13) 
 		{
 			fields += "Barcode must be digit with size 13.\n";
 			return false;
 		}
-		if (price.matches("/[0-9]|.") == false || price.length() == 0)
+		if (price.matches("^\\d+(\\.\\d+)?") == false || price.length() == 0)
 		{
 			fields += "Price must be digit.\n";
 			return false;
 		}
-		if (quantity.matches("/[0-9]") == false || quantity.length() == 0)
+		if (quantity.matches("^\\d+?") == false || quantity.length() == 0)
 		{
 			fields += "Quantity must be digit.\n";
 			return false;
 		}
-		if (treshold.matches("/[0-9]") == false || treshold.length() == 0)
+		if (treshold.matches("^\\d+?") == false || treshold.length() == 0)
 		{
 			fields += "Treshold must be digit.\n";
 			return false;
@@ -50,6 +54,11 @@ public class ArticleForm {
 	}
 	
 	
+
+	/**
+	 * Récupère l'article dans le cas ou tout est valide.
+	 * @return ArticleStock l'article saisi par l'utilisateur. 
+	 */
 	public ArticleStock getUserStockArticle(HttpServletRequest request)
 	{
 		String barcode = request.getParameter("barcode");
@@ -68,7 +77,10 @@ public class ArticleForm {
 		return art;
 	}
 
-
+	/**
+	 * Récupère le message de l'erreur de formulaire.
+	 * @return String message d'erreur.
+	 */
 	public String getMessage() {
 		return fields;
 	}

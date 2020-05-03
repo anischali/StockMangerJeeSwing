@@ -9,9 +9,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.List;
 
 import com.gest.beans.ArticleStock;
 import com.gest.beans.Stock;
+import com.gest.exception.DaoException;
 
 /**
  * @author visibog
@@ -26,10 +28,12 @@ public class StockDaoImpl implements StockDao{
 	}
 	
 	
-	/*
-	 * @param ArticleStock article to add to stock
+	/**
+	 * Ajoute un article à la base de données.
+	 * @param article l'article à ajouter.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
 	 */
-	
+
 	@Override
 	public void AddArticle(ArticleStock article) throws DaoException {
 		Connection connect = null;
@@ -37,6 +41,7 @@ public class StockDaoImpl implements StockDao{
 		PreparedStatement stmt2 = null;
 		try {
 			connect = daoFactory.getConnection();
+			connect.setAutoCommit(true);
 			stmt = connect.prepareStatement("INSERT INTO Article(barcode, name, category, price) VALUES (?,?,?,?);");
 			stmt.setString(1, article.getBarcode());
 			stmt.setString(2, article.getName());
@@ -48,6 +53,7 @@ public class StockDaoImpl implements StockDao{
 			stmt2.setInt(2, article.getQuantity());
 			stmt2.setInt(3, article.getTreshold());
 			stmt2.executeUpdate();
+			
 		} catch (SQLException e) {
 			throw new DaoException("Error while trying to connect to database");
 		}
@@ -55,13 +61,14 @@ public class StockDaoImpl implements StockDao{
 
 	
 	
-	/*
-	 * @return Stock the stock which loaded from database 
-	 */
-	
+	/**
+ 	* Récupère tout le stock.
+ 	* @return Stock un objet de type stock.
+ 	* @throws DaoException erreur sql en cas de problème avec la base de données.
+ 	*/
 	@Override
 	public Stock getStock() throws DaoException {
-		String sql = "SELECT barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = Stock.barcode;";
+		String sql = "SELECT Article.barcode,name,category,price,quantity,treshold FROM Article,Stock WHERE Article.barcode = Stock.barcode;";
 		Stock stock = new Stock();
 		Connection connect = null;
 		Statement stmt = null;
@@ -78,7 +85,7 @@ public class StockDaoImpl implements StockDao{
 				art.setCategory(rs.getString("category"));
 				art.setPrice(rs.getDouble("price"));
 				art.setQuantity(rs.getInt("quantity"));
-				if (art.getQuantity() > art.getTreshold())
+				art.setTreshold(rs.getInt("treshold"));
 					stock.addArticle(art);
 			}
 			
@@ -98,11 +105,15 @@ public class StockDaoImpl implements StockDao{
 	}
 
 	
-	
+	/**
+	 * Retourne le stock mais dans une liste.
+	 * @return List<ArticleStock> le stock dans une liste.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
 	@Override
-	public ArrayList<ArticleStock> getStockList() throws DaoException {
-		String sql = "SELECT barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = Stock.barcode;";
-		ArrayList<ArticleStock> articles = new ArrayList<ArticleStock>();
+	public List<ArticleStock> getStockList() throws DaoException {
+		String sql = "SELECT Article.barcode,name,category,price,quantity,treshold FROM Article,Stock WHERE Article.barcode = Stock.barcode;";
+		List<ArticleStock> articles = new ArrayList<ArticleStock>();
 		Connection connect = null;
 		Statement stmt = null;
 		ResultSet rs = null;
@@ -118,8 +129,8 @@ public class StockDaoImpl implements StockDao{
 				art.setCategory(rs.getString("category"));
 				art.setPrice(rs.getDouble("price"));
 				art.setQuantity(rs.getInt("quantity"));
-				if (art.getQuantity() > art.getTreshold())
-					articles.add(art);
+				art.setTreshold(rs.getInt("treshold"));
+				articles.add(art);
 			}
 			
 		} catch (SQLException e) {
@@ -137,7 +148,11 @@ public class StockDaoImpl implements StockDao{
 		return articles;
 	}
 	
-	
+	/**
+	 * Supprime un artile de la base de donnée.
+	 * @param article l'article à supprimmer.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
 	@Override
 	public void removeStock(ArticleStock article) throws DaoException {
 		Connection connect = null;
@@ -145,11 +160,11 @@ public class StockDaoImpl implements StockDao{
 		PreparedStatement stmt2 = null;
 		try {
 			connect = daoFactory.getConnection();
+			connect.setAutoCommit(true);
 			stmt = connect.prepareStatement("DELETE FROM Article WHERE barcode = '"+ article.getBarcode() + "';");
 			stmt.executeUpdate();
 			stmt2 = connect.prepareStatement("DELETE FROM Stock WHERE barcode = '" + article.getBarcode() + "';");
 			stmt2.executeUpdate();
-			connect.commit();
 		} catch (SQLException e) {
 			try {
 				if (connect != null)
@@ -166,20 +181,45 @@ public class StockDaoImpl implements StockDao{
 		}
 	}
 
+
+	/**
+	 * Mis à jour le stock quand la modification concerne le meme code bar
+	 * @param article l'article concerné.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
 	@Override
 	public void updateStock(ArticleStock article) throws DaoException{
 		this.removeStock(article);
 		this.AddArticle(article);
 	}
+
+
+
 	
-	
-	/*
-	 * @param barcode to search in database
+	/**
+	 * Mis à jour du stock en prenant les anciennes données et les nouvels données.
+	 * @param oldArticle les anciennes informations d'un article.
+	 * @param newArticle les nouvels informations d'un article.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
+	@Override
+	public void updateStock(ArticleStock oldArticle, ArticleStock newArticle) throws DaoException{
+		
+		this.removeStock(oldArticle);
+		this.AddArticle(newArticle);
+	}
+
+
+	/**
+	 * Récupère un article de stock avec son code bar.
+	 * @param barcode code bar d'un article
+	 * @return ArticleStock les detail de l'article recherché.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
 	 */
 	@Override
 	public ArticleStock getArticle(String barcode) throws DaoException
 	{
-		String sql = "SELECT barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = barcodeStock.barcode AND Article.barcode = "+ barcode + ";";
+		String sql = "SELECT Article.barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = Stock.barcode AND Article.barcode = "+ barcode + ";";
 		ArticleStock art = new ArticleStock();
 		Connection connect = null;
 		Statement stmt = null;
@@ -212,6 +252,44 @@ public class StockDaoImpl implements StockDao{
 		return art;
 	}
 	
+
+
+	/**
+	 * Verifie l'existance d'un article en stock.
+	 * @param barcode
+	 * @return true si l'article existe sinon false
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
+	public boolean articleExists(String barcode) throws DaoException
+	{
+		boolean exist = false;
+		String sql = "SELECT Article.barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = Stock.barcode AND Article.barcode = "+ barcode + ";";
+		Connection connect = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			connect = daoFactory.getConnection();
+			stmt = connect.createStatement();
+			rs = stmt.executeQuery(sql);
+			if (rs.next() == true)
+			{
+				exist = true;
+			}
+			
+		} catch (SQLException e) {
+			throw new DaoException("Error while trying to connect to database");
+		}finally {
+			try {
+				if (connect != null)
+					connect.close();
+			} catch (Exception e3) {
+				throw new DaoException("Error while trying to connect to database");
+			}
+		}
+		return exist;
+	}
+	
+	
 	/**
 	 * @return the daoFactory
 	 */
@@ -227,5 +305,39 @@ public class StockDaoImpl implements StockDao{
 	}
 	
 	
-	
+	/**
+	 * Mis à jour de la base données stock à partir d'un panier de commande.
+	 * @param articles liste d'articles d'une commande.
+	 * @throws DaoException erreur sql en cas de problème avec la base de données.
+	 */
+	@Override
+	public void updateStock(List<ArticleStock> articles) throws DaoException
+	{
+		Connection connect = null;
+		String sql = "";
+		PreparedStatement stmt = null;
+		try {
+			connect = daoFactory.getConnection();
+			connect.setAutoCommit(true);
+			for (ArticleStock art : articles)
+			{
+				sql = "UPDATE `Stock` SET Stock.quantity=Stock.quantity-"+ art.getQuantity() +" WHERE Stock.barcode='"+ art.getBarcode() +"';";
+				stmt = connect.prepareStatement(sql);
+				stmt.executeUpdate();
+				System.out.println(art.getBarcode());
+			}
+			
+			System.out.println(sql);
+		}catch(SQLException e) {
+			throw new DaoException("Error while trying to connect to database");
+		} finally {
+			try {
+				if (connect != null)
+					connect.close();
+			} catch (Exception e3) {
+				throw new DaoException("Error while trying to connect to database");
+			}
+		}
+	}
+
 }

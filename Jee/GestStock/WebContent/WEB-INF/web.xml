@@ -22,8 +22,15 @@
   
    <servlet-mapping>
     <servlet-name>StockServlet</servlet-name>
+    <url-pattern>/stockedit</url-pattern>
+  </servlet-mapping>
+  
+   <servlet-mapping>
+    <servlet-name>StockServlet</servlet-name>
     <url-pattern>/stockview</url-pattern>
   </servlet-mapping>
+
+
 
    <servlet-mapping>
     <servlet-name>StockServlet</servlet-name>

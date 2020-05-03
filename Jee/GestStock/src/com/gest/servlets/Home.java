@@ -8,9 +8,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.gest.daos.DaoFactory;
-import com.gest.daos.StockDao;
-
 /**
  * Servlets implementation class Home
  */
