@@ -1,0 +1,23 @@
+package com.gest.forms;
+
+import javax.servlet.http.HttpServletRequest;
+
+import com.gest.beans.ArticleStock;
+
+public class ArticleStockForm {
+	
+	
+	public ArticleStock getUserArticle(HttpServletRequest request)
+	{
+		String barode = request.getParameter("barcode");
+		String name = request.getParameter("name");
+		String category = request.getParameter("category");
+		String price = request.getParameter("price");
+		String quantity = request.getParameter("quantity");
+		String treshold = request.getParameter("treshold");
+		ArticleStock art = new ArticleStock();
+		
+		
+		return art;
+	}
+}

@@ -1,0 +1,121 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+
+import com.gest.beans.ArticleStock;
+import com.gest.beans.Stock;
+
+/**
+ * @author visibog
+ *
+ */
+public class StockDaoDB implements StockDao{
+	private DaoFactory daoFactory;
+	
+	
+	public StockDaoDB(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+	
+	
+	/*
+	 * @param ArticleStock article to add to stock
+	 */
+	
+	@Override
+	public void AddArticle(ArticleStock article) throws DaoException {
+		Connection connect = null;
+		PreparedStatement stmt = null;
+		PreparedStatement stmt2 = null;
+		try {
+			connect = daoFactory.getConnection();
+			stmt = connect.prepareStatement("INSERT INTO Article(barcode, name, category, price) VALUES (?,?,?,?);");
+			stmt.setString(1, article.getBarcode());
+			stmt.setString(2, article.getName());
+			stmt.setString(3, article.getCategory());
+			stmt.setDouble(4, article.getPrice());
+			stmt.executeUpdate();
+			stmt2 = connect.prepareStatement("INSERT INTO Stock(barcode, quantity) VALUES (?,?);");
+			stmt2.setString(1, article.getBarcode());
+			stmt2.setInt(2, article.getQuantity());
+			stmt2.executeUpdate();
+		} catch (SQLException e) {
+			throw new DaoException("Error while trying to connect to database");
+		}
+	}
+
+	
+	
+	/*
+	 * @return Stock the stock which loaded from database 
+	 */
+	
+	@Override
+	public Stock getStock() {
+		String sql = "SELECT barcode,name,category,price,quantity FROM Article,Stock WHERE Article.barcode = Stock.barcode;";
+		Stock stock = new Stock();
+		Connection connect = null;
+		Statement stmt = null;
+		ResultSet rs = null;
+		try {
+			connect = daoFactory.getConnection();
+			stmt = connect.createStatement();
+			rs = stmt.executeQuery(sql);
+			while (rs.next())
+			{
+				ArticleStock art = new ArticleStock();
+				art.setBarcode(rs.getString("barcode"));
+				art.setName(rs.getString("name"));
+				art.setCategory(rs.getString("category"));
+				art.setPrice(rs.getDouble("price"));
+				art.setQuantity(rs.getInt("quantity"));
+				stock.addArticle(art);
+			}
+			
+		} catch (SQLException e) {
+			throw new DaoException("Error while trying to connect to database");
+		}
+		
+		
+		return stock;
+	}
+
+	@Override
+	public void removeStock(ArticleStock article) {
+		
+	}
+
+	@Override
+	public void updateStock(ArticleStock article) {
+		
+	}
+	@Override
+	public ArticleStock getArticle(String barcode)
+	{
+		return null;
+	}
+	
+	/**
+	 * @return the daoFactory
+	 */
+	public DaoFactory getDaoFactory() {
+		return daoFactory;
+	}
+
+	/**
+	 * @param daoFactory the daoFactory to set
+	 */
+	public void setDaoFactory(DaoFactory daoFactory) {
+		this.daoFactory = daoFactory;
+	}
+	
+	
+	
+}

@@ -1,0 +1,6 @@
+package com.gest.beans;
+
+public class ArticleStock extends Article{
+	private int quantity;
+	
+}

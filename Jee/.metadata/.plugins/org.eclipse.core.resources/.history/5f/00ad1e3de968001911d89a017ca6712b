@@ -1,0 +1,61 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+/**
+ * @author Anis CHALI
+ *
+ */
+public class DaoFactory {
+	private String url;
+	private String user;
+	private String pass;
+	
+	
+	public DaoFactory(String url, String user, String pass) {
+		
+	}
+	
+	
+	/**
+	 * @return the url
+	 */
+	public String getUrl() {
+		return url;
+	}
+	/**
+	 * @param url the url to set
+	 */
+	public void setUrl(String url) {
+		this.url = url;
+	}
+	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+	/**
+	 * @param user the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
+	/**
+	 * @return the pass
+	 */
+	public String getPass() {
+		return pass;
+	}
+	/**
+	 * @param pass the pass to set
+	 */
+	public void setPass(String pass) {
+		this.pass = pass;
+	}
+	
+	
+	
+
+}

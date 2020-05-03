@@ -1,0 +1,13 @@
+package com.gest.daos;
+
+import com.gest.beans.ArticleStock;
+import com.gest.beans.Stock;
+
+public interface StockDao {
+
+	public void AddArticle(ArticleStock article);
+	public Stock getStock();
+	public void removeStock(ArticleStock article);
+	public void updateStock(ArticleStock article);
+	
+}

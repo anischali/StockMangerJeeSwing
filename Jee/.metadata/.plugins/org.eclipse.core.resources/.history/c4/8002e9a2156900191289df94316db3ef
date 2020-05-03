@@ -1,0 +1,7 @@
+package com.gest.daos;
+
+public class DaoException extends Exception{
+	
+	
+
+}

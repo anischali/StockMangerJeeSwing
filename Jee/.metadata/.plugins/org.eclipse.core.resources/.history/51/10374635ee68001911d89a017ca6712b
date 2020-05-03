@@ -1,0 +1,7 @@
+package com.gest.beans;
+
+public class ArticleOrder extends Order{
+	private static long id;
+	
+	
+}

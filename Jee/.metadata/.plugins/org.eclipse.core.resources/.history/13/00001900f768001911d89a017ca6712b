@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<link rel="stylesheet" type="text/css" media="screen" href="style/bootstrap.min.css" />
+	<script src="js/bootstrap.min.js"></script>
+	<meta charset="UTF-8">
+	<title>Home</title>
+</head>
+<body>
+<%@ include file="Menu.jsp" %>
+
+<p><c:out value="Bonjour"></c:out> </p>
+
+</body>
+</html>

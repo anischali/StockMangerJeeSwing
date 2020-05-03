@@ -1,0 +1,15 @@
+/**
+ * 
+ */
+package com.gest.beans;
+
+/**
+ * @author visibog
+ *
+ */
+public class Article {
+	private String barcode;
+	private String name;
+	private String category;
+	private double price;
+}

@@ -1,0 +1,17 @@
+/**
+ * 
+ */
+package com.gest.beans;
+
+/**
+ * @author Anis CHALI
+ *
+ */
+public class Article {
+	private String barcode;
+	private String name;
+	private String category;
+	private double price;
+	
+	
+}

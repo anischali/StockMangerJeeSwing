@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+/**
+ * @author visibog
+ *
+ */
+public class FactoryDao {
+
+}

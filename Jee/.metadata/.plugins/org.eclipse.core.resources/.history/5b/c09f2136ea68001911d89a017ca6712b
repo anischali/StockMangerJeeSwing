@@ -1,0 +1,33 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+/**
+ * @author Anis CHALI
+ *
+ */
+public class DaoFactory {
+	private String url;
+	private String user;
+	private String pass;
+	
+	
+	public DaoFactory(String url, String user, String pass) {
+		this.url = url;
+		this.user = user;
+		this.pass = pass;
+	}
+	
+	
+	public static DaoFactory getInstance()
+	{
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (Exception e) {
+			// TODO: handle exception
+		}
+	}
+	
+
+}

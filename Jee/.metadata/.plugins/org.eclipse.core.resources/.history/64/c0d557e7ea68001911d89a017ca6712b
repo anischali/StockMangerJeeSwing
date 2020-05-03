@@ -1,0 +1,43 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+
+/**
+ * @author Anis CHALI
+ *
+ */
+public class DaoFactory {
+	private String url;
+	private String user;
+	private String pass;
+	
+	
+	public DaoFactory(String url, String user, String pass) {
+		this.url = url;
+		this.user = user;
+		this.pass = pass;
+	}
+	
+	
+	public static DaoFactory getInstance()
+	{
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return new DaoFactory("jdbc:mysql://localhost:3306/gest", "gest", "gest123456789");
+	}
+	
+	public Connection getConnection()
+	{
+		return DriverManager.getConnection(url,user, pass);
+	}
+	
+
+}

@@ -1,0 +1,32 @@
+package com.gest.beans;
+
+public class ArticleStock extends Article{
+	private int quantity;
+	private int treshold;
+	
+	
+	public ArticleStock() {
+		super();
+	}
+	
+	/**
+	 * @return the quantity
+	 */
+	public int getQuantity() {
+		return quantity;
+	}
+
+	/**
+	 * @param quantity the quantity to set
+	 */
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
+
+	@Override
+	public String toString() {
+		return super.toString() + "[ quantity=" + quantity + "]";
+	}
+	
+	
+}

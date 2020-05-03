@@ -1,0 +1,51 @@
+package com.gest.servlets;
+
+import java.io.IOException;
+import javax.servlet.ServletException;
+import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import com.gest.forms.ArticleForm;
+
+/**
+ * Servlet implementation class StockServlet
+ */
+@WebServlet("/StockServlet")
+public class StockServlet extends HttpServlet {
+	private static final long serialVersionUID = 1L;
+       
+    /**
+     * @see HttpServlet#HttpServlet()
+     */
+    public StockServlet() {
+        super();
+    }
+
+	/**
+	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		if(request.getRequestURI().contains("/stockadd"))
+		{
+			this.getServletContext().getRequestDispatcher("/WEB-INF/stockadd.jsp").forward(request, response);
+		}
+		else if (request.getRequestURI().contains("/stockview"))
+		{
+			this.getServletContext().getRequestDispatcher("/WEB-INF/stockview.jsp").forward(request, response);
+		}
+		else
+		{
+			this.getServletContext().getRequestDispatcher("/WEB-INF/stock.jsp").forward(request, response);
+		}
+	}
+
+	/**
+	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
+	 */
+	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		ArticleForm form = new ArticleForm();	
+	}
+
+}

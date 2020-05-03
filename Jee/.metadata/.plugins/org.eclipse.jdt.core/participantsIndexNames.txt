@@ -1,0 +1,5 @@
+INDEX VERSION 1.131
+/home/visibog/Bureau/S6/J2EE/Jee/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/32488589.index
+/GestStock/src
+/home/visibog/Bureau/S6/J2EE/Jee/.metadata/.plugins/org.eclipse.jst.jsp.core/jspsearch/4073534605.index
+/GestStock/src

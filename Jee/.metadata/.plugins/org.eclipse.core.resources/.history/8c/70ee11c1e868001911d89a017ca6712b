@@ -1,0 +1,12 @@
+/**
+ * 
+ */
+package com.gest.daos;
+
+/**
+ * @author Anis CHALi
+ *
+ */
+public class FactoryDao {
+
+}

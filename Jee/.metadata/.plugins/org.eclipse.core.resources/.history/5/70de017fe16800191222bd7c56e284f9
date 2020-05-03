@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?><project-modules id="moduleCoreId" project-version="1.5.0">
+    <wb-module deploy-name="GestStock">
+        <property name="context-root" value="GestStock"/>
+        <property name="java-output-path" value="/GestStock/build/classes"/>
+    </wb-module>
+</project-modules>

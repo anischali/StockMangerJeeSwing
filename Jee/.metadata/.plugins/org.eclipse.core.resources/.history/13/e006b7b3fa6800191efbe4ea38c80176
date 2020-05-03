@@ -1,0 +1,26 @@
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<!DOCTYPE html>
+<html>
+<head>
+
+	<meta charset="UTF-8">
+	<style><%@include file="/WEB-INF/style/bootstrap.min.css"%></style>
+	<title>Home</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+    <div class="navbar-nav">
+      <a class="nav-item nav-link active" href="/">Home <span class="sr-only">(current)</span></a>
+      <a class="nav-item nav-link" href="/">Stock Menu</a>
+      <a class="nav-item nav-link" href="/">Order Menu</a>
+    </div>
+  </div>
+</nav>
+
+<p><c:out value="Bonjour"></c:out> </p>
+
+</body>
+</html>
